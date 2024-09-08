@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_restx import Api, Resource
 
 import os
@@ -43,7 +43,6 @@ class Empleados(Resource):
         conn.reconnect()
         if conn and conn.is_connected():
             with conn.cursor() as cursor:
-                #result = cursor.execute("SELECT * FROM empleado")
                 cursor.execute("SELECT * FROM empleado")
                 headers = [x[0] for x in cursor.description]
                 rows = cursor.fetchall()
@@ -62,10 +61,32 @@ class Empleados(Resource):
             print("Could not connect")
         return { 'message': 'No fue posible obtener los datos de los empleados' }, 500
     
-    def post(self, data):
+    def post(self):
         conn.reconnect()
+        data = request.get_json()
+        name = data['name']
+        lastname = data['lastname']
+        department_code = data['department_code']
+        hiring_date = data['hiring_date']
+        job = data['job']
+
+        success = False
+        if name and lastname and department_code and hiring_date and job:
+            if conn and conn.is_connected():
+                with conn.cursor() as cursor:
+                    sql = 'INSERT INTO empleado (nombre, apellido, codigo_departamento, fecha_contratacion, cargo) VALUES (%s, %s, %s, %s, %s)'
+                    values = (name, lastname, department_code, hiring_date, job)
+                    cursor.execute(sql, values)
+                    conn.commit()
+                    success = cursor.rowcount > 0
+                conn.close()
+                if success:
+                    return {}, 200
+                return { 'message': 'No fue posible ingresar el nuevo empleado' }, 500
+            else:
+                print("Could not connect")            
         conn.close()
-        return {}, 200
+        return { 'message': 'Todos los campos son obligatorios para registrar un empleado'}, 500
 
 @api.route('/api/empleados/<int:id>')
 class Empleados_id(Resource):
