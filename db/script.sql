@@ -1,12 +1,12 @@
 USE db_project;
 
 CREATE TABLE departamento (
-    codigo INT PRIMARY KEY,
+    codigo INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(35) NOT NULL
 );
 
 CREATE TABLE empleado (
-    codigo              INT PRIMARY KEY,
+    codigo              INT PRIMARY KEY AUTO_INCREMENT,
     nombre              VARCHAR(50) NOT NULL,
     apellido            VARCHAR(50) NOT NULL,
     codigo_departamento INT NOT NULL,

@@ -40,17 +40,31 @@ class TestRoute(Resource):
 @api.route('/api/empleados')
 class Empleados(Resource):
     def get(self):
+        conn.reconnect()
         if conn and conn.is_connected():
             with conn.cursor() as cursor:
-                result = cursor.execute("SELECT * FROM empleado")
+                #result = cursor.execute("SELECT * FROM empleado")
+                cursor.execute("SELECT * FROM empleado")
+                headers = [x[0] for x in cursor.description]
                 rows = cursor.fetchall()
             conn.close()
-            return { 'employees': rows}, 200
+
+            json_data = []
+            for row in rows:
+                item = dict(zip(headers, row))
+
+                if 'fecha_contratacion' in item:
+                    item['fecha_contratacion'] = item['fecha_contratacion'].strftime('%Y-%m-%d')
+
+                json_data.append(item)
+            return { 'employees': json_data }, 200
         else:
             print("Could not connect")
-        return { 'message': 'No fue posible conectar con la base de datos' }, 500
+        return { 'message': 'No fue posible obtener los datos de los empleados' }, 500
     
-    def post(self):
+    def post(self, data):
+        conn.reconnect()
+        conn.close()
         return {}, 200
 
 @api.route('/api/empleados/<int:id>')
@@ -64,7 +78,22 @@ class Empleados_id(Resource):
 @api.route('/api/departamentos')
 class Departamentos(Resource):
     def get(self):
-        return {}, 500
+        conn.reconnect()
+        if conn and conn.is_connected():
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT * FROM departamento")
+                headers = [x[0] for x in cursor.description]
+                rows = cursor.fetchall()
+            conn.close()
+
+            json_data = []
+            for row in rows:
+                item = dict(zip(headers, row))
+                json_data.append(item)
+            return { 'departments': json_data }, 200
+        else:
+            print("Could not connect")
+        return { 'message': 'No fue posible obtener los datos de los departamentos' }, 500
     
 if __name__ == '__main__':
     app.run(debug=True)
