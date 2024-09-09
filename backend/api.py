@@ -91,7 +91,36 @@ class Empleados(Resource):
 @api.route('/api/empleados/<int:id>')
 class Empleados_id(Resource):
     def put(self, id):
-        return {}, 200
+        conn.reconnect()
+        data = request.get_json()
+        name = data['name']
+        lastname = data['lastname']
+        department_code = data['department_code']
+        hiring_date = data['hiring_date']
+        job = data['job']
+
+        success = False
+        if id:
+            if conn and conn.is_connected():
+                if name and lastname and department_code and hiring_date and job:
+                    with conn.cursor() as cursor:
+                        sql = '''UPDATE empleado SET nombre = %s, apellido = %s,
+                                    codigo_departamento = %s, fecha_contratacion = %s,
+                                    cargo = %s
+                                    WHERE codigo = %s'''
+                        cursor.execute(sql, (name, lastname, department_code, hiring_date, job, id))
+                        conn.commit()
+                        success = cursor.rowcount > 0
+                    conn.close()
+                    if success:
+                        return { 'message': 'Empleado actualizado con éxito' }, 200
+                    return { 'message': 'No fue posible actualizar el empleado' }, 500
+                else:
+                    return { 'message': 'Todos los campos son obligatorios para actualizar un empleado' }, 500
+            else:
+                print("Could not connect")            
+        conn.close()
+        return { 'message': 'Es necesario proporcionar el código para actualizar el empleado'}, 500
     
     def delete(self, id):
         conn.reconnect()
