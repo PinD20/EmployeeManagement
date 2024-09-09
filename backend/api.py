@@ -81,7 +81,7 @@ class Empleados(Resource):
                     success = cursor.rowcount > 0
                 conn.close()
                 if success:
-                    return {}, 200
+                    return { 'message': 'Empleado registrado con éxito' }, 200
                 return { 'message': 'No fue posible ingresar el nuevo empleado' }, 500
             else:
                 print("Could not connect")            
@@ -90,11 +90,27 @@ class Empleados(Resource):
 
 @api.route('/api/empleados/<int:id>')
 class Empleados_id(Resource):
-    def put(self):
+    def put(self, id):
         return {}, 200
     
-    def delete(self):
-        return {}, 200
+    def delete(self, id):
+        conn.reconnect()
+        success = False
+        if id:
+            if conn and conn.is_connected():
+                with conn.cursor() as cursor:
+                    sql = 'DELETE FROM empleado WHERE codigo = %s'
+                    cursor.execute(sql, (id, ))
+                    conn.commit()
+                    success = cursor.rowcount > 0
+                conn.close()
+                if success:
+                    return { 'message': 'Empleado eliminado con éxito' }, 200
+                return { 'message': 'No fue posible eliminar el empleado' }, 500
+            else:
+                print("Could not connect")            
+        conn.close()
+        return { 'message': 'Es necesario proporcionar el código para eliminar el empleado'}, 500
     
 @api.route('/api/departamentos')
 class Departamentos(Resource):
