@@ -19,6 +19,7 @@ CORS(app)
 api = Api(app)
 
 #Conexión inicial a base de datos
+conn = None
 try:
     conn = mysql.connector.connect(
         host = db_host,
@@ -37,7 +38,7 @@ except mysql.connector.Error as err:
 # Reconexión a base de datos
 def connectDb():
     global conn
-    if conn:
+    if conn is not None:
         conn.reconnect() # Reestablecer conexión con la db
         if conn.is_connected():
             return True

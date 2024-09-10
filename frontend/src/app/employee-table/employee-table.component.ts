@@ -214,8 +214,6 @@ export class EmployeeTableComponent {
       fecha_contratacion: (new Date(employee.fecha_contratacion)).toISOString().split('T')[0]
     });
 
-    console.log(this.editEmployeeForm.value);
-
     //Abrir formulario de edición
     const modal = new (window as any).bootstrap.Modal(document.getElementById('editEmployeeModal'));
     modal.show();
