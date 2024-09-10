@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class EmployeeService {
 
-  API: string = 'http:127.0.0.1:5000/'
+  API: string = 'http://127.0.0.1:5000/'
   
   constructor(private http: HttpClient) { }
 
@@ -19,10 +19,10 @@ export class EmployeeService {
   }
 
   editEmployee(employee: any) {
-    return this.http.put(`${this.API}/api/empleados/${employee.code}`, employee);
+    return this.http.put(`${this.API}/api/empleados/${employee.codigo}`, employee);
   }
 
-  deleteEmployee(employee: any) {
-    return this.http.delete(`${this.API}/api/empleados/${employee.code}`, employee);
+  deleteEmployee(employeeCode: any) {
+    return this.http.delete(`${this.API}/api/empleados/${employeeCode}`);
   }
 }

@@ -4,3 +4,12 @@ section {
     text-align: center;
     padding-top: 3vh;
 }
+
+button {
+    margin-left: 2px;
+}
+
+.table-rounded {
+    border-radius: 10px;
+    overflow: hidden;
+}

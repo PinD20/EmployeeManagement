@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_restx import Api, Resource
+from flask_cors import CORS
 
 import os
 from dotenv import load_dotenv
@@ -14,6 +15,7 @@ db_user = os.getenv('DB_USER')
 db_password = os.getenv('DB_PASSWORD')
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 # Conexión a base de datos
@@ -43,7 +45,9 @@ class Empleados(Resource):
         conn.reconnect()
         if conn and conn.is_connected():
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM empleado")
+                cursor.execute('''SELECT  em.codigo, em.nombre, em.apellido, dpto.codigo AS codigo_departamento, dpto.nombre AS departamento, em.fecha_contratacion, em.cargo
+                                    FROM empleado em
+                                    INNER JOIN departamento dpto ON em.codigo_departamento = dpto.codigo''')
                 headers = [x[0] for x in cursor.description]
                 rows = cursor.fetchall()
             conn.close()
@@ -93,11 +97,11 @@ class Empleados_id(Resource):
     def put(self, id):
         conn.reconnect()
         data = request.get_json()
-        name = data['name']
-        lastname = data['lastname']
-        department_code = data['department_code']
-        hiring_date = data['hiring_date']
-        job = data['job']
+        name = data['nombre']
+        lastname = data['apellido']
+        department_code = data['codigo_departamento']
+        hiring_date = data['fecha_contratacion']
+        job = data['cargo']
 
         success = False
         if id:

@@ -1,6 +1,6 @@
 <section>
-    @if (false) {
-        <table>
+    @if (this.employeesList.length > 0) {
+        <table class="table table-primary table-rounded">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -12,18 +12,18 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody>
-                @for (employee of employeesList; track employee.code) {
+            <tbody class="table-group-divider">
+                @for (employee of employeesList; track employee.codigo) {
                    <tr>
-                        <td>{{employee.code}}</td>
-                        <td>{{employee.name}}</td>
-                        <td>{{employee.lastname}}</td>
-                        <td>{{employee.department}}</td>
-                        <td>{{employee.job}}</td>
-                        <td>{{employee.date}}</td>
+                        <td>{{employee.codigo}}</td>
+                        <td>{{employee.nombre}}</td>
+                        <td>{{employee.apellido}}</td>
+                        <td>{{employee.departamento}}</td>
+                        <td>{{employee.cargo}}</td>
+                        <td>{{employee.fecha_contratacion}}</td>
                         <td>
-                            <button>Editar</button>
-                            <button>Eliminar</button>
+                            <button type="button" (click)="openEditModal(employee)" class="btn btn-primary">Editar</button>
+                            <button type="button" (click)="deleteEmployee(employee)" class="btn btn-danger">Eliminar</button>
                         </td>
                    </tr> 
                 }
@@ -33,3 +33,40 @@
         <h3>No existen empleados registrados</h3>
     }
 </section>
+
+<!-- Modal para Editar Empleado -->
+<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editEmployeeModalLabel">Editar Empleado</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form [formGroup]="editEmployeeForm" (ngSubmit)="onSubmitEdit()">
+            <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" formControlName="nombre">
+            </div>
+            <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" id="apellido" class="form-control" formControlName="apellido">
+            </div>
+            <div class="mb-3">
+            <label for="departamento" class="form-label">Departamento</label>
+            <input type="text" id="departamento" class="form-control" formControlName="departamento">
+            </div>
+            <div class="mb-3">
+            <label for="cargo" class="form-label">Cargo</label>
+            <input type="text" id="cargo" class="form-control" formControlName="cargo">
+            </div>
+            <div class="mb-3">
+            <label for="fecha_contratacion" class="form-label">Fecha de Contratación</label>
+            <input type="date" id="fecha_contratacion" class="form-control" formControlName="fecha_contratacion">
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
