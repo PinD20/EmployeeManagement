@@ -151,7 +151,7 @@ export class EmployeeTableComponent {
       fecha_contratacion: (new Date()).toISOString().split('T')[0]
     });
 
-    //Abrir formulario de edición
+    //Abrir formulario de creación
     const modal = new (window as any).bootstrap.Modal(document.getElementById('createEmployeeModal'));
     modal.show();
   }
@@ -211,8 +211,10 @@ export class EmployeeTableComponent {
       apellido: employee.apellido,
       codigo_departamento: employee.codigo_departamento,
       cargo: employee.cargo,
-      fecha_contratacion: employee.fecha_contratacion
+      fecha_contratacion: (new Date(employee.fecha_contratacion)).toISOString().split('T')[0]
     });
+
+    console.log(this.editEmployeeForm.value);
 
     //Abrir formulario de edición
     const modal = new (window as any).bootstrap.Modal(document.getElementById('editEmployeeModal'));
@@ -224,11 +226,16 @@ export class EmployeeTableComponent {
     if (this.editEmployeeForm.valid) {
       let editedEmployee = this.editEmployeeForm.value;
       editedEmployee.codigo_departamento = +editedEmployee.codigo_departamento;
+
       this.employeeService.editEmployee(editedEmployee)
       .subscribe(
         res => {
           this.getEmployees(); //Actualizar lista de empleados
-          alert("ok")
+          Swal.fire({
+            title: "Empleado actualizado",
+            text: "El empleado fue editado con éxito.",
+            icon: "success"
+          });
         },
         err => {
           if (err.apiMessage) {
