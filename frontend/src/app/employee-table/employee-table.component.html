@@ -1,0 +1,35 @@
+<section>
+    @if (false) {
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Departamento</th>
+                    <th>Cargo</th>
+                    <th>Fecha de contratación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (employee of employeesList; track employee.code) {
+                   <tr>
+                        <td>{{employee.code}}</td>
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.lastname}}</td>
+                        <td>{{employee.department}}</td>
+                        <td>{{employee.job}}</td>
+                        <td>{{employee.date}}</td>
+                        <td>
+                            <button>Editar</button>
+                            <button>Eliminar</button>
+                        </td>
+                   </tr> 
+                }
+            </tbody>
+        </table>
+    } @else {
+        <h3>No existen empleados registrados</h3>
+    }
+</section>
