@@ -1,21 +1,65 @@
 section {
-    max-width: 80%;
+    max-width: 90%;
     margin: 0 auto;
     text-align: center;
     padding-top: 3vh;
 }
 
 button {
-    margin-left: 2px;
+    margin-left: 5px;
 }
 
 .table-rounded {
     border-radius: 10px;
     overflow: hidden;
+    width: 100%;
+    table-layout: auto;
 }
 
 .button-container {
     text-align: right;
-    width: 70%;
-    margin: 0 auto;
+    margin: 1rem 0;
+    margin-right: 5%;
+}
+
+.div-center {
+    text-align: center;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
+    .button-container {
+        text-align: center;
+    }
+
+    table {
+        font-size: 0.5rem;
+    }
+
+    button {
+        margin: 0.2rem;
+        display: grid;
+        width: 100%;
+        font-size: 0.6rem;
+    }
+
+    /* Ajustes para los modales */
+    .modal-dialog {
+        max-width: 90%;
+        margin: 0 auto;
+        font-size: 0.6rem;
+    }
+}
+
+/* Ajustes para dispositivos muy pequeños */
+@media (max-width: 400px) {
+    section {
+        padding: 2vh 1vw;
+    }
+
+    .modal-dialog {
+        margin: 0 auto;
+        max-width: 90%;
+        font-size: 0.6rem;
+    }
 }

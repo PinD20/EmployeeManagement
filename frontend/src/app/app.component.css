@@ -1,4 +1,13 @@
 h1 {
     margin-top: 5vh;
     text-align: center;
+    font-weight: bold;
+}
+
+/* Padding y centrar contenido en dispositivos más pequeños */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+        margin-top: 3vh;
+    }
 }

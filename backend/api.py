@@ -63,7 +63,7 @@ class Empleados(Resource):
             return { 'employees': json_data }, 200
         else:
             print("Could not connect")
-        return { 'message': 'No fue posible obtener los datos de los empleados' }, 500
+        return { 'apiMessage': 'No fue posible obtener los datos de los empleados' }, 500
     
     def post(self):
         conn.reconnect()
@@ -86,11 +86,11 @@ class Empleados(Resource):
                 conn.close()
                 if success:
                     return { 'message': 'Empleado registrado con éxito' }, 200
-                return { 'message': 'No fue posible ingresar el nuevo empleado' }, 500
+                return { 'apiMessage': 'No fue posible ingresar el nuevo empleado' }, 500
             else:
                 print("Could not connect")            
         conn.close()
-        return { 'message': 'Todos los campos son obligatorios para registrar un empleado'}, 500
+        return { 'apiMessage': 'Todos los campos son obligatorios para registrar un empleado'}, 500
 
 @api.route('/api/empleados/<int:id>')
 class Empleados_id(Resource):
@@ -118,13 +118,13 @@ class Empleados_id(Resource):
                     conn.close()
                     if success:
                         return { 'message': 'Empleado actualizado con éxito' }, 200
-                    return { 'message': 'No fue posible actualizar el empleado' }, 500
+                    return { 'apiMessage': 'No fue posible actualizar el empleado' }, 500
                 else:
-                    return { 'message': 'Todos los campos son obligatorios para actualizar un empleado' }, 500
+                    return { 'apiMessage': 'Todos los campos son obligatorios para actualizar un empleado' }, 500
             else:
                 print("Could not connect")            
         conn.close()
-        return { 'message': 'Es necesario proporcionar el código para actualizar el empleado'}, 500
+        return { 'apiMessage': 'Es necesario proporcionar el código para actualizar el empleado'}, 500
     
     def delete(self, id):
         conn.reconnect()
@@ -163,7 +163,7 @@ class Departamentos(Resource):
             return { 'departments': json_data }, 200
         else:
             print("Could not connect")
-        return { 'message': 'No fue posible obtener los datos de los departamentos' }, 500
+        return { 'apiMessage': 'No fue posible obtener los datos de los departamentos' }, 500
     
 if __name__ == '__main__':
     app.run(debug=True)

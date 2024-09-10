@@ -50,7 +50,20 @@ export class EmployeeTableComponent {
         this.employeesList = data.employees;
       },
       err => {
-        alert(err);
+        if (err.apiMessage) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.apiMessage,
+          });
+        } else {
+          console.log(err)
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Ha ocurrido un error inesperado obteniendo la lista de empleados.",
+          });
+        }
       }
     )
   }
@@ -64,7 +77,20 @@ export class EmployeeTableComponent {
         this.departmentsList = data.departments;
       },
       err => {
-        alert(err);
+        if (err.apiMessage) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.apiMessage,
+          });
+        } else {
+          console.log(err)
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Ha ocurrido un error inesperado obteniendo la lista de departamentos.",
+          });
+        }
       }
     )
   }
@@ -93,12 +119,20 @@ export class EmployeeTableComponent {
             });
           },
           err => {
-            console.log(err);
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Ocurrió un error durante la eliminación del empleado.",
-            });
+            if (err.apiMessage) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: err.apiMessage,
+              });
+            } else {
+              console.log(err)
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Ha ocurrido un error inesperado obteniendo la lista de empleados.",
+              });
+            }
           }
         )
       }
@@ -131,11 +165,27 @@ export class EmployeeTableComponent {
       .subscribe(
         res => {
           this.getEmployees(); //Actualizar lista de empleados
-          alert("ok")
+          Swal.fire({
+            title: "Empleado agregado",
+            text: "El empleado fue agregado con éxito.",
+            icon: "success"
+          });
         },
         err => {
-          alert(err);
-          console.log(err)
+          if (err.apiMessage) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: err.apiMessage,
+            });
+          } else {
+            console.log(err)
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "No fue posible agregar al nuevo empleado.",
+            });
+          }
         }
       )
 
@@ -143,7 +193,11 @@ export class EmployeeTableComponent {
       const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('createEmployeeModal'));
       modal.hide();
     } else {
-      alert("Formulario inválido");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Todos los campos son requeridos para agregar un empleado",
+      });
     }
   }
 
@@ -177,8 +231,20 @@ export class EmployeeTableComponent {
           alert("ok")
         },
         err => {
-          alert(err);
-          console.log(err)
+          if (err.apiMessage) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: err.apiMessage,
+            });
+          } else {
+            console.log(err)
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Ha ocurrido un error inesperado al editar el empleado",
+            });
+          }
         }
       )
 
@@ -186,7 +252,11 @@ export class EmployeeTableComponent {
       const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('editEmployeeModal'));
       modal.hide();
     } else {
-      alert("Formulario inválido");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Todos los campos son requeridos para editar un empleado",
+      });
     }
   }
 }
