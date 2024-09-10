@@ -10,7 +10,7 @@ export class DepartmentService {
   
   constructor(private http: HttpClient) { }
 
-  getEmployees() {
+  getDepartments() {
     return this.http.get(`${this.API}/api/departamentos`);
   }
 

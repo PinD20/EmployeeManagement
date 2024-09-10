@@ -13,3 +13,9 @@ button {
     border-radius: 10px;
     overflow: hidden;
 }
+
+.button-container {
+    text-align: right;
+    width: 70%;
+    margin: 0 auto;
+}

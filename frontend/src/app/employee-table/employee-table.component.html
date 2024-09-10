@@ -1,3 +1,6 @@
+<div class="button-container">
+    <button type="button" (click)="openCreateModal()" class="btn btn-success">Agregar empleado</button>
+</div>
 <section>
     @if (this.employeesList.length > 0) {
         <table class="table table-primary table-rounded">
@@ -34,7 +37,48 @@
     }
 </section>
 
-<!-- Modal para Editar Empleado -->
+<!-- Modal para crear empleado -->
+<div class="modal fade" id="createEmployeeModal" tabindex="-1" aria-labelledby="createEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="createEmployeeModalLabel">Crear Empleado</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form [formGroup]="createEmployeeForm" (ngSubmit)="onSubmitCreate()">
+            <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" formControlName="nombre">
+            </div>
+            <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" id="apellido" class="form-control" formControlName="apellido">
+            </div>
+            <div class="mb-3">
+            <label for="codigo_departamento" class="form-label">Departamento</label>
+            <select id="codigo_departamento" class="form-select" formControlName="codigo_departamento">
+                @for (dpto of departmentsList; track dpto.codigo) {
+                    <option [value]="dpto.codigo">{{dpto.nombre}}</option>
+                }
+            </select>
+            </div>
+            <div class="mb-3">
+            <label for="cargo" class="form-label">Cargo</label>
+            <input type="text" id="cargo" class="form-control" formControlName="cargo">
+            </div>
+            <div class="mb-3">
+            <label for="fecha_contratacion" class="form-label">Fecha de Contratación</label>
+            <input type="date" id="fecha_contratacion" class="form-control" formControlName="fecha_contratacion">
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Empleado</button>
+        </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Modal para editar empleado -->
 <div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -53,8 +97,12 @@
             <input type="text" id="apellido" class="form-control" formControlName="apellido">
             </div>
             <div class="mb-3">
-            <label for="departamento" class="form-label">Departamento</label>
-            <input type="text" id="departamento" class="form-control" formControlName="departamento">
+            <label for="codigo_departamento" class="form-label">Departamento</label>
+            <select id="codigo_departamento" class="form-select" formControlName="codigo_departamento">
+                @for (dpto of departmentsList; track dpto.codigo) {
+                    <option [value]="dpto.codigo">{{dpto.nombre}}</option>
+                }
+            </select>
             </div>
             <div class="mb-3">
             <label for="cargo" class="form-label">Cargo</label>

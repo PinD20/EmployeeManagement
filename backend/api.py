@@ -68,11 +68,11 @@ class Empleados(Resource):
     def post(self):
         conn.reconnect()
         data = request.get_json()
-        name = data['name']
-        lastname = data['lastname']
-        department_code = data['department_code']
-        hiring_date = data['hiring_date']
-        job = data['job']
+        name = data['nombre']
+        lastname = data['apellido']
+        department_code = data['codigo_departamento']
+        hiring_date = data['fecha_contratacion']
+        job = data['cargo']
 
         success = False
         if name and lastname and department_code and hiring_date and job:
@@ -102,7 +102,7 @@ class Empleados_id(Resource):
         department_code = data['codigo_departamento']
         hiring_date = data['fecha_contratacion']
         job = data['cargo']
-
+        print(department_code)
         success = False
         if id:
             if conn and conn.is_connected():

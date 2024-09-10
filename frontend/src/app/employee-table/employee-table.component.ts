@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EmployeeService } from '../services/employee.service';
 import { DepartmentService } from '../services/department.service';
-import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,21 +14,30 @@ import Swal from 'sweetalert2';
 export class EmployeeTableComponent {
 
   employeesList: any = []; //Lista de empleados
+  departmentsList: any = []; //Lista de departamentos
+  createEmployeeForm: FormGroup; //Formulario para crear empleado
   editEmployeeForm: FormGroup; //Formulario para editar empleado
 
   constructor(
     private employeeService: EmployeeService,
+    private departmentService: DepartmentService,
     private formBuilder: FormBuilder
   ) { 
     this.getEmployees();
+    this.createEmployeeForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      codigo_departamento: [0],
+      cargo: ['', Validators.required],
+      fecha_contratacion: ['', Validators.required]
+    });
     this.editEmployeeForm = this.formBuilder.group({
       codigo: [0],
-      nombre: [''],
-      apellido: [''],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
       codigo_departamento: [0],
-      departamento: [''],
-      cargo: [''],
-      fecha_contratacion: ['']
+      cargo: ['', Validators.required],
+      fecha_contratacion: ['', Validators.required]
     });
   }
 
@@ -39,6 +48,20 @@ export class EmployeeTableComponent {
       res => {
         let data:any = res;
         this.employeesList = data.employees;
+      },
+      err => {
+        alert(err);
+      }
+    )
+  }
+
+  //Obtener lista de departamentos
+  getDepartments() {
+    this.departmentService.getDepartments()
+    .subscribe(
+      res => {
+        let data:any = res;
+        this.departmentsList = data.departments;
       },
       err => {
         alert(err);
@@ -82,14 +105,57 @@ export class EmployeeTableComponent {
     });
   }
 
+  openCreateModal(){
+    this.getDepartments(); //Obtener lista de departamentos
+
+    //Setear valores en blanco
+    this.createEmployeeForm.setValue({
+      nombre: '',
+      apellido: '',
+      codigo_departamento: 0,
+      cargo: '',
+      fecha_contratacion: (new Date()).toISOString().split('T')[0]
+    });
+
+    //Abrir formulario de edición
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('createEmployeeModal'));
+    modal.show();
+  }
+
+  // Crear empleado
+  onSubmitCreate() {
+    if (this.createEmployeeForm.valid) {
+      let newEmployee = this.createEmployeeForm.value;
+      newEmployee.codigo_departamento = +newEmployee.codigo_departamento;
+      this.employeeService.createEmployee(newEmployee)
+      .subscribe(
+        res => {
+          this.getEmployees(); //Actualizar lista de empleados
+          alert("ok")
+        },
+        err => {
+          alert(err);
+          console.log(err)
+        }
+      )
+
+      // Cerrar el modal después de guardar los cambios
+      const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('createEmployeeModal'));
+      modal.hide();
+    } else {
+      alert("Formulario inválido");
+    }
+  }
+
   openEditModal(employee: any){
+    this.getDepartments(); //Obtener lista de departamentos
+
     //Setear valores del empleado en el formulario
     this.editEmployeeForm.setValue({
       codigo: employee.codigo,
       nombre: employee.nombre,
       apellido: employee.apellido,
       codigo_departamento: employee.codigo_departamento,
-      departamento: employee.departamento,
       cargo: employee.cargo,
       fecha_contratacion: employee.fecha_contratacion
     });
@@ -102,7 +168,8 @@ export class EmployeeTableComponent {
   // Guardar cambios de edición
   onSubmitEdit() {
     if (this.editEmployeeForm.valid) {
-      const editedEmployee = this.editEmployeeForm.value;
+      let editedEmployee = this.editEmployeeForm.value;
+      editedEmployee.codigo_departamento = +editedEmployee.codigo_departamento;
       this.employeeService.editEmployee(editedEmployee)
       .subscribe(
         res => {
@@ -111,12 +178,15 @@ export class EmployeeTableComponent {
         },
         err => {
           alert(err);
+          console.log(err)
         }
       )
 
       // Cerrar el modal después de guardar los cambios
       const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('editEmployeeModal'));
       modal.hide();
+    } else {
+      alert("Formulario inválido");
     }
   }
 }
